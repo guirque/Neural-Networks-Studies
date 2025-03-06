@@ -39,9 +39,9 @@ def readjustWeights(input, weights, output, expected_output):
     Gets an input and readjusts weights accordingly. Returns the readjusted weights array.
     """
 
-    LEARNING_INDICATOR = 0.1
+    LEARNING_RATE = 0.1
     error = expected_output - output
-    weights = weights + LEARNING_INDICATOR * input * error
+    weights = weights + LEARNING_RATE * input * error
     return weights
 
 def training(inputs, answers):
