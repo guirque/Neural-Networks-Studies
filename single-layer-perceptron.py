@@ -11,7 +11,7 @@ training_data = np.array([[0, 0],
                           [1, 0], 
                           [1, 1]]) # Holds many different test inputs
 
-correct_answers = np.array([0, 1, 1, 1]) # Answers
+correct_answers = np.array([0, 0, 0, 1]) # Answers
 
 
 ### FUNCTIONS ########################################################################
