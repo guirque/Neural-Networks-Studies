@@ -25,18 +25,19 @@ class multilayer_perceptron:
     hidden_layer_size = 3 # number of neurons in hidden layer
     input_size = 2 # number of values in input
     
-    weights=np.array([1, 2])
+    weights=np.array([])
     """
-        Matrix. Each column corresponds to the weights of an input value, to be fed to the first layer.  
-        A row corresponds to the values to be used by a specific neuron.
+        Matrix. 
+        
+        Each element corresponds to the weight of the connection between input x<sub>i</sub> and neuron<sub>j</sub>.   
 
         Example:
 
         -------------------
-        |x1 | x2 | x3 |
-        |---|---|---|
-        |0.32|0.54|0.35|
-        |0.12|0.90|0.65|
+        |       | neuron1 | neuron2 | neuron3 |
+        |---    |---      |---      |---      |
+        |**x1** | 0.32    |0.54     |0.35     |
+        |**x2** |0.12     |0.90     |0.65     |
         ------------------
     """
     
@@ -50,10 +51,10 @@ class multilayer_perceptron:
         self.input_size = input_size
         
         # Insert an array with random weights for every input connection to a hidden layer neuron
-        for neuronIndex in range(self.hidden_layer_size):
+        for inputIndex in range(self.input_size):
 
             weights_array = np.array([])
-            for input in range(self.input_size):
+            for neuronIndex in range(self.hidden_layer_size):
                 weights_array = np.append(weights_array, random.random())
             
             self.weights = np.vstack([self.weights, weights_array])
@@ -132,9 +133,8 @@ class multilayer_perceptron:
 
         # each row is an array of weights that have xi as input. Each column corresponds to the weights associated with one neuron.
         # e.g.: a column holds the weights from multiple inputs that are used by sthe sum function in a specific neuron.
-        transposed = np.transpose(self.weights) 
 
-        sum_results = np.matmul(inputs, transposed) # each row is the sum result for a specific input
+        sum_results = np.matmul(inputs, self.weights) # each row is the sum result for a specific input
 
         hidden_layer_results = multilayer_perceptron.sigmoid_function(sum_results) # each row is a hidden layer result for a specific input. Each element is the output of a neuron.
 
