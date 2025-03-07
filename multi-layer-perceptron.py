@@ -51,6 +51,7 @@ class multilayer_perceptron:
         self.input_size = input_size
         
         # Insert an array with random weights for every input connection to a hidden layer neuron
+        self.weights = np.array([[x for x in range(self.hidden_layer_size)]])
         for inputIndex in range(self.input_size):
 
             weights_array = np.array([])
