@@ -78,20 +78,69 @@ class multilayer_perceptron:
         """
         return 1/(1+(np.exp(-sum)))
 
-    def function(self, input):
-        
-        # input is an array of values, like [0,1]
+    def function(self, inputs):
+        """
+        Runs the perceptron (function).
 
-        # Feed to each neuron in hidden layer
-        results = np.array([])
-        for neuronIndex in range(self.hidden_layer_size):
-            sum_value = multilayer_perceptron.sum_function(input, self.weights[neuronIndex])
-            result = multilayer_perceptron.sigmoid_function(sum_value)
-            results = np.append(results, result)
+        ## Parameters
+
+        - inputs: array of input arrays.
+
+        ## Returns
+
+        - an array of results, for each input.
+
+        ## Why using a matrix multiplication?
+
+        - As a tool: Matrix multiplication allows you to obtain the dot (scalar) product of different vectors/arrays. The result is a matrix with the scalar product of each line of the first matrix by each column of the second.
+        - Motivation: For the sum function used, it is desired to obtain the scalar product of each input by its corresponding weights (for each neuron in the hidden layer).
+        - Execution: For such, the inputs can be put in a matrix and the weights in another one. That way, we get the scalar product (which is the result of the sum function) of every input by all the involved weights.
+    
+        Example:
+
+        ```
+        inputs =
+        [
+            [0, 1],
+            [0, 0],
+            [1, 1]
+        ]
+
+
+        weights = 
+        [
+            [w1, w2, w3],
+            [w4, w5, w6]
+        ]
+
+
+        resulting_matrix = 
+        [
+            [dot([0,1], [w1, w4]), dot([0,1], [w2, w5]), dot([0,1], [w3, w6])],
+            [dot([0,0], [w1, w4]), dot([0,0], [w2, w5]), dot([0,1], [w3, w6])],
+            [dot([1,1], [w1, w4]), dot([1,1], [w2, w5]), dot([1,1], [w3, w6])]
+        ]
+        ```
+
+        Each line of the resulting matrix is the desired sum result for an input, that is, its dot product with the corresponding weights, for each neuron.  
+        Then, it is possible to apply the activation function to each sum value (or to a whole line, with NumPy). Therefore, the result of the hidden layer is obtained, and  
+        it is possible to proceed to the next step: passing the data onto the output neuron (performing the sum and running the activation function once more).
+        
+        With this method, it is possible to avoid the use of for loops.
+
+        """
+
+        # each row is an array of weights that have xi as input. Each column corresponds to the weights associated with one neuron.
+        # e.g.: a column holds the weights from multiple inputs that are used by sthe sum function in a specific neuron.
+        transposed = np.transpose(self.weights) 
+
+        sum_results = np.matmul(inputs, transposed) # each row is the sum result for a specific input
+
+        hidden_layer_results = multilayer_perceptron.sigmoid_function(sum_results) # each row is a hidden layer result for a specific input
 
         # Feed results to output neuron
-        sum_value = multilayer_perceptron.sum_function(results, self.output_weights)
-        final_result = multilayer_perceptron.sigmoid_function(sum_value)
+        sum_value = multilayer_perceptron.sum_function(hidden_layer_results, self.output_weights) # applying dot product between each row and the array of output weights
+        final_result = multilayer_perceptron.sigmoid_function(sum_value) # finding final result (applying activation function for each element [sum] in array)
 
         return final_result
     
@@ -103,8 +152,9 @@ class multilayer_perceptron:
         """
         pass
 
-ml_perceptron = multilayer_perceptron(3, 2)
-print(ml_perceptron.weights)
-print(ml_perceptron.output_weights)
 
-print(ml_perceptron.function([0, 1]))
+### RUNNING ##########################################################################
+
+ml_perceptron = multilayer_perceptron(3, 2)
+
+print('results: ', ml_perceptron.function([[0, 0], [0,1], [1, 0], [1, 1]]))
