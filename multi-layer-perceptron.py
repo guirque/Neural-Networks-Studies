@@ -136,7 +136,7 @@ class multilayer_perceptron:
 
         sum_results = np.matmul(inputs, transposed) # each row is the sum result for a specific input
 
-        hidden_layer_results = multilayer_perceptron.sigmoid_function(sum_results) # each row is a hidden layer result for a specific input
+        hidden_layer_results = multilayer_perceptron.sigmoid_function(sum_results) # each row is a hidden layer result for a specific input. Each element is the output of a neuron.
 
         # Feed results to output neuron
         sum_value = multilayer_perceptron.sum_function(hidden_layer_results, self.output_weights) # applying dot product between each row and the array of output weights
